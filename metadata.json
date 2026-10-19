@@ -1,0 +1,6 @@
+{
+  "name": "Angielski na 6! - Trener do Kartkówki (Unit 1)",
+  "description": "Interaktywny trener szybkiej i skutecznej nauki do kartkówki z angielskiego dla 10-latka na podstawie podręcznika: rodzina, kraje i narodowości, czasownik 'to be', zaimki dzierżawcze.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
