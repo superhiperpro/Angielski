@@ -58,6 +58,8 @@ export const FlashcardsMode: React.FC<FlashcardsModeProps> = ({ onEarnStar }) =>
     handleNext();
   };
 
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+
   const handleMarkNeedPractice = () => {
     if (!currentWord) return;
     sounds.playWrong();
@@ -70,10 +72,14 @@ export const FlashcardsMode: React.FC<FlashcardsModeProps> = ({ onEarnStar }) =>
     handleNext();
   };
 
-  const handlePlayAudio = (e: React.MouseEvent, slow = false) => {
-    e.stopPropagation();
+  const handlePlayAudio = (e?: React.MouseEvent, slow = false) => {
+    if (e) e.stopPropagation();
     if (!currentWord) return;
+    setIsPlayingAudio(true);
     speakEnglish(currentWord.en, slow);
+    setTimeout(() => {
+      setIsPlayingAudio(false);
+    }, 1800);
   };
 
   if (!currentWord) {
@@ -173,22 +179,31 @@ export const FlashcardsMode: React.FC<FlashcardsModeProps> = ({ onEarnStar }) =>
                 Po angielsku
               </div>
 
-              <div className="text-4xl sm:text-5xl font-black text-slate-800 mb-4 tracking-tight">
-                {currentWord.en}
+              <div
+                onClick={(e) => handlePlayAudio(e, false)}
+                className="text-4xl sm:text-5xl font-black text-slate-800 mb-3 tracking-tight hover:text-indigo-600 transition-colors cursor-pointer group flex items-center justify-center gap-2"
+                title="Kliknij słówko, aby posłuchać"
+              >
+                <span>{currentWord.en}</span>
+                <Volume2 className="w-6 h-6 text-indigo-400 group-hover:text-indigo-600 group-hover:scale-110 transition-all opacity-80" />
               </div>
 
               {/* Audio Listen Buttons */}
               <div className="flex items-center gap-3 my-3">
                 <button
                   onClick={(e) => handlePlayAudio(e, false)}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-sm shadow-md transition-transform active:scale-95"
+                  className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm shadow-md transition-all active:scale-95 ${
+                    isPlayingAudio
+                      ? 'bg-amber-500 text-white ring-4 ring-amber-200 scale-105 animate-pulse'
+                      : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                  }`}
                 >
-                  <Volume2 className="w-5 h-5" />
-                  Posłuchaj wymowy
+                  <Volume2 className={`w-5 h-5 ${isPlayingAudio ? 'animate-bounce' : ''}`} />
+                  <span>{isPlayingAudio ? 'Lektor mówi...' : 'Posłuchaj wymowy'}</span>
                 </button>
                 <button
                   onClick={(e) => handlePlayAudio(e, true)}
-                  className="flex items-center gap-1.5 px-3 py-2.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded-2xl font-bold text-xs transition-colors"
+                  className="flex items-center gap-1.5 px-3.5 py-3 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded-2xl font-bold text-xs transition-colors"
                   title="Posłuchaj wolniej"
                 >
                   <Snail className="w-4 h-4" />
